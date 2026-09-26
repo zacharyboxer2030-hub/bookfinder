@@ -8,10 +8,6 @@
 
 <style>
 
-/* =========================
-   BASIC SETUP
-========================= */
-
 * {
     box-sizing: border-box;
 }
@@ -19,696 +15,324 @@
 body {
     margin: 0;
     min-height: 100vh;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+    font-family: Arial, sans-serif;
     color: white;
 
     background:
-        radial-gradient(
-            circle at 10% 10%,
-            #7137ff 0%,
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 90% 80%,
-            #00c6ff 0%,
-            transparent 30%
-        ),
-        #070711;
+        radial-gradient(circle at top left, #542cff, transparent 35%),
+        radial-gradient(circle at bottom right, #00c6ff, transparent 35%),
+        #080b18;
 
-    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
-
-
-/* =========================
-   ANIMATED BACKGROUND
-========================= */
-
-body::before {
-    content: "";
-
-    position: fixed;
-
-    width: 350px;
-    height: 350px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(124,58,237,0.25);
-
-    filter: blur(80px);
-
-    top: 20%;
-    left: -150px;
-
-    animation:
-        floatOne 8s infinite alternate ease-in-out;
-
-    pointer-events: none;
-}
-
-body::after {
-    content: "";
-
-    position: fixed;
-
-    width: 300px;
-    height: 300px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(6,182,212,0.22);
-
-    filter: blur(80px);
-
-    bottom: 10%;
-    right: -120px;
-
-    animation:
-        floatTwo 9s infinite alternate ease-in-out;
-
-    pointer-events: none;
-}
-
-@keyframes floatOne {
-
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(100px);
-    }
-
-}
-
-@keyframes floatTwo {
-
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(-100px);
-    }
-
-}
-
-
-/* =========================
-   APP
-========================= */
 
 .app {
-
     width: 100%;
-
-    max-width: 520px;
-
-    margin: auto;
-
-    padding:
-        25px 16px 40px;
-
-    position: relative;
-
-    z-index: 1;
+    max-width: 500px;
 }
 
-
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .header {
-
     text-align: center;
-
-    margin-top: 20px;
-
-    margin-bottom: 30px;
+    padding: 15px 0 20px;
 }
 
 .logo {
+    font-size: 42px;
+    font-weight: bold;
+}
 
-    font-size: 38px;
-
-    font-weight: 800;
-
-    letter-spacing: -1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #ffffff,
-            #a5f3fc
-        );
-
-    -webkit-background-clip: text;
-
-    -webkit-text-fill-color:
-        transparent;
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
 .tagline {
-
-    color: #a9a9bd;
-
+    color: #bfc7ff;
     margin-top: 8px;
-
-    font-size: 15px;
 }
 
-
-/* =========================
-   MAIN GLASS CARD
-========================= */
+/* MAIN CARD */
 
 .card {
+    background: rgba(255,255,255,0.09);
 
-    background:
-        rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
 
-    border:
-        1px solid
-        rgba(255,255,255,0.12);
+    backdrop-filter: blur(15px);
 
-    border-radius:
-        30px;
+    border-radius: 25px;
 
-    padding:
-        24px;
-
-    backdrop-filter:
-        blur(25px);
-
-    -webkit-backdrop-filter:
-        blur(25px);
+    padding: 18px;
 
     box-shadow:
-        0 30px 80px
-        rgba(0,0,0,0.45);
+        0 20px 60px rgba(0,0,0,0.35);
 }
-
-
-/* =========================
-   SCANNER
-========================= */
-
-.scanner {
-
-    position: relative;
-
-    height: 290px;
-
-    border-radius:
-        25px;
-
-    overflow: hidden;
-
-    background:
-        rgba(0,0,0,0.35);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.12);
-}
-
 
 /* CAMERA */
 
-video {
+.scanner {
+    position: relative;
 
     width: 100%;
+    height: 330px;
 
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    background: #05070d;
+}
+
+video {
+    width: 100%;
     height: 100%;
 
     object-fit: cover;
 }
 
-
-/* CAMERA PLACEHOLDER */
-
 .camera-placeholder {
-
     position: absolute;
 
     inset: 0;
 
     display: flex;
 
-    flex-direction: column;
-
     justify-content: center;
-
     align-items: center;
 
     text-align: center;
+
+    color: #aeb7d9;
+
+    padding: 30px;
+
+    pointer-events: none;
 }
 
-.camera-icon {
+/* SCAN BOX */
 
-    font-size: 65px;
-
-    margin-bottom: 15px;
-
-    animation:
-        cameraFloat 2s
-        infinite alternate ease-in-out;
-}
-
-@keyframes cameraFloat {
-
-    from {
-        transform:
-            translateY(0);
-    }
-
-    to {
-        transform:
-            translateY(-8px);
-    }
-
-}
-
-.camera-title {
-
-    font-size: 20px;
-
-    font-weight: bold;
-}
-
-.camera-subtitle {
-
-    margin-top: 8px;
-
-    color: #9f9fb2;
-
-    font-size: 13px;
-}
-
-
-/* =========================
-   SCAN CORNERS
-========================= */
-
-.corner {
-
+.scan-corners {
     position: absolute;
 
-    width: 35px;
+    inset: 18%;
 
-    height: 35px;
+    border: 3px solid rgba(255,255,255,0.7);
 
-    border-color:
-        #22d3ee;
+    border-radius: 15px;
 
-    border-style: solid;
-
-    z-index: 2;
+    pointer-events: none;
 }
 
-.corner.top-left {
-
-    top: 18px;
-
-    left: 18px;
-
-    border-width:
-        3px 0 0 3px;
-}
-
-.corner.top-right {
-
-    top: 18px;
-
-    right: 18px;
-
-    border-width:
-        3px 3px 0 0;
-}
-
-.corner.bottom-left {
-
-    bottom: 18px;
-
-    left: 18px;
-
-    border-width:
-        0 0 3px 3px;
-}
-
-.corner.bottom-right {
-
-    bottom: 18px;
-
-    right: 18px;
-
-    border-width:
-        0 3px 3px 0;
-}
-
-
-/* SCAN LINE */
+/* MOVING SCAN LINE */
 
 .scan-line {
-
     position: absolute;
 
-    left: 25px;
+    left: 20%;
+    right: 20%;
 
-    right: 25px;
+    height: 3px;
 
-    height: 2px;
-
-    background:
-        #22d3ee;
+    background: #00e5ff;
 
     box-shadow:
-        0 0 15px
-        #22d3ee;
+        0 0 15px #00e5ff;
 
-    animation:
-        scanLine 2.5s
-        infinite ease-in-out;
+    animation: scan 2s infinite;
 
-    z-index: 3;
+    pointer-events: none;
 }
 
-@keyframes scanLine {
+@keyframes scan {
 
     0% {
-        top: 25px;
+        top: 22%;
     }
 
     50% {
-        top: calc(100% - 25px);
+        top: 75%;
     }
 
     100% {
-        top: 25px;
+        top: 22%;
     }
 
 }
 
+/* STATUS */
 
-/* =========================
-   BUTTONS
-========================= */
+.status {
+    text-align: center;
+
+    margin: 15px 0;
+
+    color: #cbd3ff;
+
+    min-height: 22px;
+}
+
+/* BUTTONS */
 
 button,
 .choose-photo {
 
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
     width: 100%;
+
+    text-align: center;
 
     border: none;
 
-    border-radius:
-        17px;
+    border-radius: 15px;
 
-    padding:
-        17px;
+    padding: 15px;
 
-    margin-top:
-        14px;
+    margin-top: 12px;
+
+    font-size: 16px;
+
+    font-weight: bold;
 
     color: white;
 
-    font-size:
-        16px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    display:
-        flex;
-
-    justify-content:
-        center;
-
-    align-items:
-        center;
-
-    gap:
-        8px;
+    cursor: pointer;
 
     background:
         linear-gradient(
             135deg,
-            #7c3aed,
-            #06b6d4
+            #6a35ff,
+            #00bfff
         );
 
     box-shadow:
-        0 10px 25px
-        rgba(6,182,212,0.18);
+        0 8px 25px rgba(0,180,255,0.25);
 
-    transition:
-        transform .2s,
-        box-shadow .2s;
+    transition: 0.2s;
 }
 
 button:hover,
 .choose-photo:hover {
 
-    transform:
-        translateY(-3px);
+    transform: translateY(-2px);
 
     box-shadow:
-        0 15px 35px
-        rgba(6,182,212,0.28);
+        0 12px 30px rgba(0,180,255,0.35);
 }
 
 button:active,
 .choose-photo:active {
 
-    transform:
-        scale(.98);
+    transform: scale(0.98);
 }
 
+/* HIDE FILE INPUT */
 
-/* HIDDEN FILE INPUT */
+input[type="file"] {
+    display: none;
+}
 
-.choose-photo input {
+/* RESULT */
+
+.result {
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background: rgba(0,0,0,0.25);
 
     display: none;
 }
 
+/* BOOK COVER */
 
-/* =========================
-   STATUS
-========================= */
+.cover {
 
-.status {
+    width: 100px;
 
-    text-align:
-        center;
+    max-height: 145px;
 
-    margin-top:
-        18px;
+    object-fit: cover;
 
-    color:
-        #a9a9bd;
+    border-radius: 8px;
 
-    font-size:
-        13px;
+    margin-bottom: 12px;
 
-    min-height:
-        20px;
+    display: none;
 }
 
-
-/* =========================
-   RESULT
-========================= */
-
-.result {
-
-    margin-top:
-        20px;
-
-    display:
-        none;
-}
-
-.book-icon {
-
-    width:
-        80px;
-
-    height:
-        105px;
-
-    border-radius:
-        8px;
-
-    display:
-        flex;
-
-    justify-content:
-        center;
-
-    align-items:
-        center;
-
-    font-size:
-        38px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #06b6d4
-        );
-
-    box-shadow:
-        0 15px 30px
-        rgba(0,0,0,.3);
-
-    margin-bottom:
-        18px;
-}
+/* BOOK TITLE */
 
 .book-title {
 
-    font-size:
-        23px;
+    font-size: 22px;
 
-    font-weight:
-        800;
+    font-weight: bold;
 }
+
+/* AUTHOR */
 
 .author {
 
-    color:
-        #aaaabc;
+    color: #c4ccff;
 
-    margin-top:
-        6px;
+    margin-top: 6px;
 }
+
+/* ISBN */
 
 .isbn {
 
-    color:
-        #6f6f84;
+    margin-top: 12px;
 
-    font-size:
-        13px;
+    color: #8feaff;
 
-    margin-top:
-        7px;
+    font-family: monospace;
 }
 
-
-/* =========================
-   BEST PRICE
-========================= */
-
-.best-price {
-
-    margin-top:
-        22px;
-
-    padding:
-        22px;
-
-    border-radius:
-        22px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(124,58,237,.35),
-            rgba(6,182,212,.18)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-}
-
-.best-label {
-
-    color:
-        #67e8f9;
-
-    font-size:
-        12px;
-
-    font-weight:
-        bold;
-
-    letter-spacing:
-        1px;
-}
+/* PRICE */
 
 .price {
 
-    font-size:
-        38px;
+    margin-top: 15px;
 
-    font-weight:
-        800;
+    font-size: 20px;
 
-    margin-top:
-        5px;
-}
+    font-weight: bold;
 
-.store {
-
-    color:
-        #bdbdcd;
-
-    margin-top:
-        3px;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-.footer {
-
-    text-align:
-        center;
-
-    margin-top:
-        25px;
-
-    color:
-        #626276;
-
-    font-size:
-        12px;
+    color: #6dffb2;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
-
 <div class="app">
-
 
     <!-- HEADER -->
 
     <div class="header">
 
         <div class="logo">
-            📚 BookFinder
+            📚
+        </div>
+
+        <div class="title">
+            BookFinder
         </div>
 
         <div class="tagline">
@@ -722,86 +346,64 @@ button:active,
 
     <div class="card">
 
-
-        <!-- SCANNER -->
+        <!-- CAMERA -->
 
         <div class="scanner">
-
-
-            <div
-                class="camera-placeholder"
-                id="cameraPlaceholder">
-
-                <div class="camera-icon">
-                    📷
-                </div>
-
-                <div class="camera-title">
-                    Scan your book
-                </div>
-
-                <div class="camera-subtitle">
-                    Point your camera at the ISBN barcode
-                </div>
-
-            </div>
-
 
             <video
                 id="video"
                 autoplay
+                muted
                 playsinline>
             </video>
 
+            <div
+                class="camera-placeholder"
+                id="placeholder">
 
-            <!-- CORNERS -->
+                📷
 
-            <div class="corner top-left"></div>
+                <br><br>
 
-            <div class="corner top-right"></div>
+                Point your camera at the
+                <br>
 
-            <div class="corner bottom-left"></div>
+                barcode on the back of the book
 
-            <div class="corner bottom-right"></div>
+            </div>
 
-
-            <!-- SCAN LINE -->
+            <div class="scan-corners"></div>
 
             <div class="scan-line"></div>
-
 
         </div>
 
 
-        <!-- CAMERA -->
+        <!-- STATUS -->
 
-        <button
-            onclick="startCamera()">
+        <div
+            class="status"
+            id="status">
 
-            📷
-            Open Camera
+            Press Start Scanner
 
-        </button>
+        </div>
 
 
-        <!-- SCAN -->
+        <!-- START CAMERA -->
 
-        <button
-            onclick="takePhoto()">
+        <button onclick="startScanner()">
 
-            🔍
-            Scan ISBN
+            📷 Start Automatic Scanner
 
         </button>
 
 
-        <!-- PHOTO -->
+        <!-- CHOOSE PHOTO -->
 
-        <label
-            class="choose-photo">
+        <label class="choose-photo">
 
-            🖼️
-            Choose Photo
+            🖼️ Choose a Photo
 
             <input
                 id="photoInput"
@@ -811,145 +413,142 @@ button:active,
         </label>
 
 
-        <!-- STATUS -->
+        <!-- RESULT -->
 
         <div
-            class="status"
-            id="status">
+            class="result"
+            id="result">
 
-        </div>
-
-
-    </div>
-
-
-    <!-- RESULT -->
-
-    <div
-        class="card result"
-        id="result">
-
-
-        <div class="book-icon">
-            📖
-        </div>
-
-
-        <div
-            class="book-title"
-            id="bookTitle">
-
-        </div>
-
-
-        <div
-            class="author"
-            id="author">
-
-        </div>
-
-
-        <div
-            class="isbn"
-            id="bookIsbn">
-
-        </div>
-
-
-        <!-- BEST PRICE -->
-
-        <div class="best-price">
-
-
-            <div class="best-label">
-                🏆 BEST PRICE
-            </div>
-
+            <img
+                id="cover"
+                class="cover">
 
             <div
-                class="price">
+                class="book-title"
+                id="bookTitle">
 
-                Coming soon
-
-            </div>
-
-
-            <div class="store">
-
-                Retailer prices will appear here.
+                Book found
 
             </div>
 
+            <div
+                class="author"
+                id="author">
+            </div>
+
+            <div
+                class="isbn"
+                id="isbn">
+            </div>
+
+            <div
+                class="price"
+                id="price">
+
+                🔎 Looking up book...
+
+            </div>
 
         </div>
 
-
     </div>
-
-
-    <div class="footer">
-
-        BookFinder © 2026
-
-    </div>
-
 
 </div>
 
 
+<!-- ZXING BARCODE SCANNER -->
+
+<script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
+
+
 <script>
 
-let stream = null;
+let codeReader;
+
+let controls;
+
+let scanning = false;
 
 
-/* =========================
-   OPEN CAMERA
-========================= */
+const video =
+    document.getElementById("video");
 
-async function startCamera() {
+const statusText =
+    document.getElementById("status");
 
-    const video =
-        document.getElementById("video");
+const placeholder =
+    document.getElementById("placeholder");
 
-    const placeholder =
-        document.getElementById(
-            "cameraPlaceholder"
-        );
 
-    const status =
-        document.getElementById("status");
+/* START SCANNER */
 
+async function startScanner() {
+
+    if (scanning) {
+        return;
+    }
 
     try {
 
-        stream =
-            await navigator
-                .mediaDevices
-                .getUserMedia({
-
-                    video: {
-
-                        facingMode: {
-                            ideal: "environment"
-                        }
-
-                    },
-
-                    audio: false
-
-                });
+        statusText.textContent =
+            "📷 Starting camera...";
 
 
-        video.srcObject =
-            stream;
+        codeReader =
+            new ZXingBrowser.BrowserMultiFormatReader();
+
+
+        scanning = true;
 
 
         placeholder.style.display =
             "none";
 
 
-        status.textContent =
-            "📷 Camera ready — point it at the ISBN.";
+        statusText.textContent =
+            "🔎 Looking for the ISBN barcode...";
+
+
+        controls =
+            await codeReader.decodeFromVideoDevice(
+
+                undefined,
+
+                video,
+
+                (result, error) => {
+
+                    if (result) {
+
+                        const barcode =
+                            result.getText();
+
+
+                        /*
+                         ISBN-13 normally starts
+                         with 978 or 979
+                        */
+
+                        if (
+
+                            barcode.length === 13 &&
+
+                            (
+                                barcode.startsWith("978") ||
+                                barcode.startsWith("979")
+                            )
+
+                        ) {
+
+                            foundISBN(barcode);
+
+                        }
+
+                    }
+
+                }
+
+            );
 
     }
 
@@ -957,51 +556,193 @@ async function startCamera() {
 
         console.error(error);
 
-        status.textContent =
-            "⚠️ Please allow camera access.";
+
+        scanning = false;
+
+
+        statusText.textContent =
+            "❌ Camera could not start. " +
+            "Make sure you allow camera access.";
 
     }
 
 }
 
 
-/* =========================
-   SCAN
-========================= */
+/* STOP SCANNER */
 
-function takePhoto() {
+function stopScanner() {
 
-    const status =
-        document.getElementById("status");
+    if (controls) {
+
+        controls.stop();
+
+        controls = null;
+
+    }
 
 
-    if (!stream) {
+    if (codeReader) {
 
-        status.textContent =
-            "📷 Open the camera first.";
+        codeReader.reset();
 
+    }
+
+
+    scanning = false;
+
+}
+
+
+/* ISBN FOUND */
+
+async function foundISBN(isbn) {
+
+    if (!scanning) {
         return;
-
     }
 
 
-    status.textContent =
-        "🔎 Looking for ISBN...";
+    stopScanner();
 
 
-    setTimeout(function() {
+    statusText.textContent =
+        "✅ ISBN found: " + isbn;
 
-        status.textContent =
-            "📸 Photo captured!";
 
-    }, 800);
+    document
+        .getElementById("result")
+        .style.display = "block";
+
+
+    document
+        .getElementById("isbn")
+        .textContent =
+        "ISBN: " + isbn;
+
+
+    document
+        .getElementById("bookTitle")
+        .textContent =
+        "🔎 Finding your book...";
+
+
+    document
+        .getElementById("author")
+        .textContent = "";
+
+
+    document
+        .getElementById("price")
+        .textContent =
+        "Please wait...";
+
+
+    await findBook(isbn);
 
 }
 
 
-/* =========================
-   CHOOSE PHOTO
-========================= */
+/* FIND BOOK */
+
+async function findBook(isbn) {
+
+    try {
+
+        const response =
+            await fetch(
+
+                "https://openlibrary.org/isbn/" +
+                isbn +
+                ".json"
+
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Book not found"
+            );
+
+        }
+
+
+        const book =
+            await response.json();
+
+
+        /* TITLE */
+
+        document
+            .getElementById("bookTitle")
+            .textContent =
+            book.title ||
+            "Unknown title";
+
+
+        /* PUBLISHER */
+
+        if (book.publishers) {
+
+            document
+                .getElementById("author")
+                .textContent =
+                "Publisher: " +
+                book.publishers
+                    .map(p => p.name)
+                    .join(", ");
+
+        }
+
+
+        /* COVER */
+
+        const cover =
+            document.getElementById("cover");
+
+
+        cover.src =
+            "https://covers.openlibrary.org/isbn/" +
+            isbn +
+            "-M.jpg";
+
+
+        cover.style.display =
+            "block";
+
+
+        /* PRICE */
+
+        document
+            .getElementById("price")
+            .textContent =
+            "💷 Price comparison coming next";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        document
+            .getElementById("bookTitle")
+            .textContent =
+            "Book not found";
+
+
+        document
+            .getElementById("price")
+            .textContent =
+            "Try scanning the barcode again.";
+
+    }
+
+}
+
+
+/* PHOTO BUTTON */
 
 document
     .getElementById("photoInput")
@@ -1009,16 +750,15 @@ document
         "change",
         function() {
 
-            const status =
-                document.getElementById(
-                    "status"
-                );
-
-
             if (this.files.length > 0) {
 
-                status.textContent =
-                    "🖼️ Photo selected — scanning coming next.";
+                statusText.textContent =
+                    "🖼️ Photo selected.";
+
+                alert(
+                    "Photo scanning will be added next. " +
+                    "For now, use the automatic camera scanner."
+                );
 
             }
 
@@ -1026,7 +766,6 @@ document
     );
 
 </script>
-
 
 </body>
 </html>
