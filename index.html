@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BookFinder</title>
+
+<style>
+
+/* =========================
+   BASIC SETUP
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            #7137ff 0%,
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            #00c6ff 0%,
+            transparent 30%
+        ),
+        #070711;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   ANIMATED BACKGROUND
+========================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(124,58,237,0.25);
+
+    filter: blur(80px);
+
+    top: 20%;
+    left: -150px;
+
+    animation:
+        floatOne 8s infinite alternate ease-in-out;
+
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(6,182,212,0.22);
+
+    filter: blur(80px);
+
+    bottom: 10%;
+    right: -120px;
+
+    animation:
+        floatTwo 9s infinite alternate ease-in-out;
+
+    pointer-events: none;
+}
+
+@keyframes floatOne {
+
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(100px);
+    }
+
+}
+
+@keyframes floatTwo {
+
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-100px);
+    }
+
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    margin: auto;
+
+    padding:
+        25px 16px 40px;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+
+    text-align: center;
+
+    margin-top: 20px;
+
+    margin-bottom: 30px;
+}
+
+.logo {
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #a5f3fc
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color:
+        transparent;
+}
+
+.tagline {
+
+    color: #a9a9bd;
+
+    margin-top: 8px;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   MAIN GLASS CARD
+========================= */
+
+.card {
+
+    background:
+        rgba(255,255,255,0.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    border-radius:
+        30px;
+
+    padding:
+        24px;
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,0.45);
+}
+
+
+/* =========================
+   SCANNER
+========================= */
+
+.scanner {
+
+    position: relative;
+
+    height: 290px;
+
+    border-radius:
+        25px;
+
+    overflow: hidden;
+
+    background:
+        rgba(0,0,0,0.35);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+}
+
+
+/* CAMERA */
+
+video {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* CAMERA PLACEHOLDER */
+
+.camera-placeholder {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+}
+
+.camera-icon {
+
+    font-size: 65px;
+
+    margin-bottom: 15px;
+
+    animation:
+        cameraFloat 2s
+        infinite alternate ease-in-out;
+}
+
+@keyframes cameraFloat {
+
+    from {
+        transform:
+            translateY(0);
+    }
+
+    to {
+        transform:
+            translateY(-8px);
+    }
+
+}
+
+.camera-title {
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+.camera-subtitle {
+
+    margin-top: 8px;
+
+    color: #9f9fb2;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   SCAN CORNERS
+========================= */
+
+.corner {
+
+    position: absolute;
+
+    width: 35px;
+
+    height: 35px;
+
+    border-color:
+        #22d3ee;
+
+    border-style: solid;
+
+    z-index: 2;
+}
+
+.corner.top-left {
+
+    top: 18px;
+
+    left: 18px;
+
+    border-width:
+        3px 0 0 3px;
+}
+
+.corner.top-right {
+
+    top: 18px;
+
+    right: 18px;
+
+    border-width:
+        3px 3px 0 0;
+}
+
+.corner.bottom-left {
+
+    bottom: 18px;
+
+    left: 18px;
+
+    border-width:
+        0 0 3px 3px;
+}
+
+.corner.bottom-right {
+
+    bottom: 18px;
+
+    right: 18px;
+
+    border-width:
+        0 3px 3px 0;
+}
+
+
+/* SCAN LINE */
+
+.scan-line {
+
+    position: absolute;
+
+    left: 25px;
+
+    right: 25px;
+
+    height: 2px;
+
+    background:
+        #22d3ee;
+
+    box-shadow:
+        0 0 15px
+        #22d3ee;
+
+    animation:
+        scanLine 2.5s
+        infinite ease-in-out;
+
+    z-index: 3;
+}
+
+@keyframes scanLine {
+
+    0% {
+        top: 25px;
+    }
+
+    50% {
+        top: calc(100% - 25px);
+    }
+
+    100% {
+        top: 25px;
+    }
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button,
+.choose-photo {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius:
+        17px;
+
+    padding:
+        17px;
+
+    margin-top:
+        14px;
+
+    color: white;
+
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #06b6d4
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(6,182,212,0.18);
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+}
+
+button:hover,
+.choose-photo:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(6,182,212,0.28);
+}
+
+button:active,
+.choose-photo:active {
+
+    transform:
+        scale(.98);
+}
+
+
+/* HIDDEN FILE INPUT */
+
+.choose-photo input {
+
+    display: none;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+
+    text-align:
+        center;
+
+    margin-top:
+        18px;
+
+    color:
+        #a9a9bd;
+
+    font-size:
+        13px;
+
+    min-height:
+        20px;
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result {
+
+    margin-top:
+        20px;
+
+    display:
+        none;
+}
+
+.book-icon {
+
+    width:
+        80px;
+
+    height:
+        105px;
+
+    border-radius:
+        8px;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    font-size:
+        38px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #06b6d4
+        );
+
+    box-shadow:
+        0 15px 30px
+        rgba(0,0,0,.3);
+
+    margin-bottom:
+        18px;
+}
+
+.book-title {
+
+    font-size:
+        23px;
+
+    font-weight:
+        800;
+}
+
+.author {
+
+    color:
+        #aaaabc;
+
+    margin-top:
+        6px;
+}
+
+.isbn {
+
+    color:
+        #6f6f84;
+
+    font-size:
+        13px;
+
+    margin-top:
+        7px;
+}
+
+
+/* =========================
+   BEST PRICE
+========================= */
+
+.best-price {
+
+    margin-top:
+        22px;
+
+    padding:
+        22px;
+
+    border-radius:
+        22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,.35),
+            rgba(6,182,212,.18)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+}
+
+.best-label {
+
+    color:
+        #67e8f9;
+
+    font-size:
+        12px;
+
+    font-weight:
+        bold;
+
+    letter-spacing:
+        1px;
+}
+
+.price {
+
+    font-size:
+        38px;
+
+    font-weight:
+        800;
+
+    margin-top:
+        5px;
+}
+
+.store {
+
+    color:
+        #bdbdcd;
+
+    margin-top:
+        3px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+
+    text-align:
+        center;
+
+    margin-top:
+        25px;
+
+    color:
+        #626276;
+
+    font-size:
+        12px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="logo">
+            📚 BookFinder
+        </div>
+
+        <div class="tagline">
+            Scan it. Find it. Buy it cheaper.
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CARD -->
+
+    <div class="card">
+
+
+        <!-- SCANNER -->
+
+        <div class="scanner">
+
+
+            <div
+                class="camera-placeholder"
+                id="cameraPlaceholder">
+
+                <div class="camera-icon">
+                    📷
+                </div>
+
+                <div class="camera-title">
+                    Scan your book
+                </div>
+
+                <div class="camera-subtitle">
+                    Point your camera at the ISBN barcode
+                </div>
+
+            </div>
+
+
+            <video
+                id="video"
+                autoplay
+                playsinline>
+            </video>
+
+
+            <!-- CORNERS -->
+
+            <div class="corner top-left"></div>
+
+            <div class="corner top-right"></div>
+
+            <div class="corner bottom-left"></div>
+
+            <div class="corner bottom-right"></div>
+
+
+            <!-- SCAN LINE -->
+
+            <div class="scan-line"></div>
+
+
+        </div>
+
+
+        <!-- CAMERA -->
+
+        <button
+            onclick="startCamera()">
+
+            📷
+            Open Camera
+
+        </button>
+
+
+        <!-- SCAN -->
+
+        <button
+            onclick="takePhoto()">
+
+            🔍
+            Scan ISBN
+
+        </button>
+
+
+        <!-- PHOTO -->
+
+        <label
+            class="choose-photo">
+
+            🖼️
+            Choose Photo
+
+            <input
+                id="photoInput"
+                type="file"
+                accept="image/*">
+
+        </label>
+
+
+        <!-- STATUS -->
+
+        <div
+            class="status"
+            id="status">
+
+        </div>
+
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div
+        class="card result"
+        id="result">
+
+
+        <div class="book-icon">
+            📖
+        </div>
+
+
+        <div
+            class="book-title"
+            id="bookTitle">
+
+        </div>
+
+
+        <div
+            class="author"
+            id="author">
+
+        </div>
+
+
+        <div
+            class="isbn"
+            id="bookIsbn">
+
+        </div>
+
+
+        <!-- BEST PRICE -->
+
+        <div class="best-price">
+
+
+            <div class="best-label">
+                🏆 BEST PRICE
+            </div>
+
+
+            <div
+                class="price">
+
+                Coming soon
+
+            </div>
+
+
+            <div class="store">
+
+                Retailer prices will appear here.
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        BookFinder © 2026
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+let stream = null;
+
+
+/* =========================
+   OPEN CAMERA
+========================= */
+
+async function startCamera() {
+
+    const video =
+        document.getElementById("video");
+
+    const placeholder =
+        document.getElementById(
+            "cameraPlaceholder"
+        );
+
+    const status =
+        document.getElementById("status");
+
+
+    try {
+
+        stream =
+            await navigator
+                .mediaDevices
+                .getUserMedia({
+
+                    video: {
+
+                        facingMode: {
+                            ideal: "environment"
+                        }
+
+                    },
+
+                    audio: false
+
+                });
+
+
+        video.srcObject =
+            stream;
+
+
+        placeholder.style.display =
+            "none";
+
+
+        status.textContent =
+            "📷 Camera ready — point it at the ISBN.";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "⚠️ Please allow camera access.";
+
+    }
+
+}
+
+
+/* =========================
+   SCAN
+========================= */
+
+function takePhoto() {
+
+    const status =
+        document.getElementById("status");
+
+
+    if (!stream) {
+
+        status.textContent =
+            "📷 Open the camera first.";
+
+        return;
+
+    }
+
+
+    status.textContent =
+        "🔎 Looking for ISBN...";
+
+
+    setTimeout(function() {
+
+        status.textContent =
+            "📸 Photo captured!";
+
+    }, 800);
+
+}
+
+
+/* =========================
+   CHOOSE PHOTO
+========================= */
+
+document
+    .getElementById("photoInput")
+    .addEventListener(
+        "change",
+        function() {
+
+            const status =
+                document.getElementById(
+                    "status"
+                );
+
+
+            if (this.files.length > 0) {
+
+                status.textContent =
+                    "🖼️ Photo selected — scanning coming next.";
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>
