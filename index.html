@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>BookFinder</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -59,9 +57,7 @@ body {
     backdrop-filter: blur(15px);
     border-radius: 25px;
     padding: 18px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.35);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
 }
 
 .scanner {
@@ -88,9 +84,7 @@ video {
     align-items: center;
 
     text-align: center;
-
     color: #aeb7d9;
-
     padding: 30px;
 
     pointer-events: none;
@@ -99,33 +93,60 @@ video {
 .scan-box {
     position: absolute;
 
-    left: 15%;
-    right: 15%;
-    top: 20%;
-    bottom: 20%;
+    left: 10%;
+    right: 10%;
+    top: 30%;
+    bottom: 30%;
 
     border: 3px solid white;
-    border-radius: 20px;
+    border-radius: 12px;
 
     pointer-events: none;
 
     box-shadow:
-        0 0 20px rgba(0,229,255,0.7);
+        0 0 20px rgba(0,229,255,0.8);
+}
+
+.scan-line {
+    position: absolute;
+
+    left: 10%;
+    right: 10%;
+
+    height: 3px;
+
+    background: #00e5ff;
+
+    box-shadow: 0 0 15px #00e5ff;
+
+    animation: scan 2s infinite;
+
+    pointer-events: none;
+}
+
+@keyframes scan {
+    0% {
+        top: 31%;
+    }
+
+    50% {
+        top: 68%;
+    }
+
+    100% {
+        top: 31%;
+    }
 }
 
 .status {
     text-align: center;
-
     margin: 15px 0;
-
     color: #cbd3ff;
-
     min-height: 22px;
 }
 
 button,
 .choose-photo {
-
     display: flex;
 
     align-items: center;
@@ -139,7 +160,6 @@ button,
     border-radius: 15px;
 
     padding: 15px;
-
     margin-top: 12px;
 
     font-size: 16px;
@@ -170,9 +190,7 @@ input[type="file"] {
 }
 
 .result {
-
     margin-top: 18px;
-
     padding: 18px;
 
     border-radius: 18px;
@@ -200,36 +218,17 @@ input[type="file"] {
     font-family: monospace;
 }
 
-.qr-result {
-
-    margin-top: 15px;
-
-    padding: 12px;
-
-    background: rgba(255,255,255,0.08);
-
-    border-radius: 12px;
-
-    word-break: break-all;
-
-    color: #ffffff;
-}
-
 .price {
-
     margin-top: 15px;
 
     font-size: 20px;
-
     font-weight: bold;
 
     color: #6dffb2;
 }
 
 .cover {
-
     width: 100px;
-
     max-height: 145px;
 
     object-fit: cover;
@@ -240,10 +239,8 @@ input[type="file"] {
 
     display: none;
 }
-
 </style>
 </head>
-
 
 <body>
 
@@ -251,9 +248,7 @@ input[type="file"] {
 
     <div class="header">
 
-        <div class="logo">
-            📚
-        </div>
+        <div class="logo">📚</div>
 
         <div class="title">
             BookFinder
@@ -268,7 +263,6 @@ input[type="file"] {
 
     <div class="card">
 
-
         <div class="scanner">
 
             <video
@@ -278,7 +272,6 @@ input[type="file"] {
                 playsinline>
             </video>
 
-
             <div
                 class="camera-placeholder"
                 id="placeholder">
@@ -286,15 +279,19 @@ input[type="file"] {
                 📷
                 <br><br>
 
-                Point your camera at a
+                Point your camera at the
                 <br>
 
-                QR code
+                ISBN barcode on the back
+                <br>
+
+                of the book
 
             </div>
 
-
             <div class="scan-box"></div>
+
+            <div class="scan-line"></div>
 
         </div>
 
@@ -303,14 +300,14 @@ input[type="file"] {
             class="status"
             id="status">
 
-            Press Start QR Scanner
+            Press Start ISBN Scanner
 
         </div>
 
 
         <button onclick="startScanner()">
 
-            📷 Start QR Scanner
+            📷 Start ISBN Scanner
 
         </button>
 
@@ -331,44 +328,33 @@ input[type="file"] {
             class="result"
             id="result">
 
-
             <img
                 id="cover"
                 class="cover">
-
 
             <div
                 class="book-title"
                 id="bookTitle">
 
-                QR Code Found
+                Book found
 
             </div>
-
 
             <div
                 class="author"
                 id="author">
             </div>
 
-
             <div
                 class="isbn"
                 id="isbn">
             </div>
 
-
-            <div
-                class="qr-result"
-                id="qrResult">
-            </div>
-
-
             <div
                 class="price"
                 id="price">
 
-                🔎 Looking for book...
+                🔎 Looking up book...
 
             </div>
 
@@ -379,19 +365,16 @@ input[type="file"] {
 </div>
 
 
-<!-- QR CODE SCANNER -->
+<!-- BARCODE SCANNER -->
 
 <script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
 
 
 <script>
 
-let codeReader;
-
-let controls;
-
+let codeReader = null;
+let controls = null;
 let scanning = false;
-
 
 const video =
     document.getElementById("video");
@@ -403,34 +386,32 @@ const placeholder =
     document.getElementById("placeholder");
 
 
-/* START QR SCANNER */
-
 async function startScanner() {
 
     if (scanning) {
         return;
     }
 
-
     try {
 
         statusText.textContent =
             "📷 Starting camera...";
 
+        /*
+         * Multi-format scanner.
+         * We only accept ISBN-13/EAN-13
+         * results below.
+         */
 
         codeReader =
-            new ZXingBrowser.BrowserQRCodeReader();
-
+            new ZXingBrowser.BrowserMultiFormatReader();
 
         scanning = true;
 
-
-        placeholder.style.display =
-            "none";
-
+        placeholder.style.display = "none";
 
         statusText.textContent =
-            "🔎 Looking for a QR code...";
+            "🔎 Looking for the ISBN barcode...";
 
 
         controls =
@@ -442,22 +423,35 @@ async function startScanner() {
 
                 (result, error) => {
 
-                    if (result) {
+                    if (!result) {
+                        return;
+                    }
 
-                        const qrText =
-                            result.getText();
+                    const barcode =
+                        result.getText();
 
+                    /*
+                     * ISBN-13 barcodes are
+                     * 13 digits and normally
+                     * start with 978 or 979.
+                     */
 
-                        foundQRCode(qrText);
+                    if (
+                        /^[0-9]{13}$/.test(barcode) &&
+                        (
+                            barcode.startsWith("978") ||
+                            barcode.startsWith("979")
+                        )
+                    ) {
+
+                        foundISBN(barcode);
 
                     }
 
                 }
-
             );
 
     }
-
 
     catch (error) {
 
@@ -465,28 +459,22 @@ async function startScanner() {
 
         scanning = false;
 
-
         statusText.textContent =
             "❌ Camera could not start. " +
-            "Make sure you allow camera access.";
+            "Allow camera access and try again.";
 
     }
-
 }
 
-
-/* STOP SCANNER */
 
 function stopScanner() {
 
     if (controls) {
 
         controls.stop();
-
         controls = null;
 
     }
-
 
     if (codeReader) {
 
@@ -494,112 +482,47 @@ function stopScanner() {
 
     }
 
-
     scanning = false;
-
 }
 
 
-/* QR CODE FOUND */
-
-async function foundQRCode(qrText) {
+async function foundISBN(isbn) {
 
     if (!scanning) {
         return;
     }
 
-
     stopScanner();
 
-
     statusText.textContent =
-        "✅ QR code found!";
-
+        "✅ ISBN found: " + isbn;
 
     document
         .getElementById("result")
         .style.display = "block";
 
-
     document
-        .getElementById("qrResult")
+        .getElementById("isbn")
         .textContent =
-        qrText;
-
+        "ISBN: " + isbn;
 
     document
         .getElementById("bookTitle")
         .textContent =
-        "QR Code Found";
-
+        "🔎 Finding your book...";
 
     document
         .getElementById("author")
-        .textContent =
-        "";
-
-
-    document
-        .getElementById("isbn")
-        .textContent =
-        "";
-
+        .textContent = "";
 
     document
         .getElementById("price")
         .textContent =
-        "🔎 Checking QR code...";
+        "Please wait...";
 
-
-    await checkForISBN(qrText);
-
+    await findBook(isbn);
 }
 
-
-/* CHECK WHETHER QR CODE CONTAINS AN ISBN */
-
-async function checkForISBN(text) {
-
-    const isbnMatch =
-        text.match(
-            /(97[89][0-9]{10})/
-        );
-
-
-    if (isbnMatch) {
-
-        const isbn =
-            isbnMatch[1];
-
-
-        document
-            .getElementById("isbn")
-            .textContent =
-            "ISBN: " + isbn;
-
-
-        document
-            .getElementById("price")
-            .textContent =
-            "🔎 Finding your book...";
-
-
-        await findBook(isbn);
-
-        return;
-
-    }
-
-
-    document
-        .getElementById("price")
-        .textContent =
-        "QR code scanned successfully.";
-
-}
-
-
-/* FIND BOOK */
 
 async function findBook(isbn) {
 
@@ -612,15 +535,9 @@ async function findBook(isbn) {
                 ".json"
             );
 
-
         if (!response.ok) {
-
-            throw new Error(
-                "Book not found"
-            );
-
+            throw new Error("Book not found");
         }
-
 
         const book =
             await response.json();
@@ -649,12 +566,10 @@ async function findBook(isbn) {
         const cover =
             document.getElementById("cover");
 
-
         cover.src =
             "https://covers.openlibrary.org/isbn/" +
             isbn +
             "-M.jpg";
-
 
         cover.style.display =
             "block";
@@ -667,29 +582,27 @@ async function findBook(isbn) {
 
     }
 
-
     catch (error) {
 
         console.error(error);
-
 
         document
             .getElementById("bookTitle")
             .textContent =
             "Book not found";
 
-
         document
             .getElementById("price")
             .textContent =
-            "The QR code was scanned, but the ISBN could not be found.";
+            "Try scanning the ISBN barcode again.";
 
     }
-
 }
 
 
-/* PHOTO BUTTON */
+/*
+ * Photo button
+ */
 
 document
     .getElementById("photoInput")
@@ -703,7 +616,7 @@ document
                     "🖼️ Photo selected.";
 
                 alert(
-                    "Photo QR scanning can be added next. " +
+                    "Photo ISBN scanning will be added next. " +
                     "For now, use the camera scanner."
                 );
 
