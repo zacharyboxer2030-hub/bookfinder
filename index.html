@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>BookFinder</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -43,7 +45,6 @@ body {
 .title {
     font-size: 30px;
     font-weight: bold;
-    margin-top: 5px;
 }
 
 .tagline {
@@ -70,9 +71,11 @@ body {
 }
 
 video {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: black;
 }
 
 .camera-placeholder {
@@ -93,10 +96,10 @@ video {
 .scan-box {
     position: absolute;
 
-    left: 10%;
-    right: 10%;
-    top: 30%;
-    bottom: 30%;
+    left: 8%;
+    right: 8%;
+    top: 32%;
+    bottom: 32%;
 
     border: 3px solid white;
     border-radius: 12px;
@@ -110,8 +113,8 @@ video {
 .scan-line {
     position: absolute;
 
-    left: 10%;
-    right: 10%;
+    left: 8%;
+    right: 8%;
 
     height: 3px;
 
@@ -125,16 +128,17 @@ video {
 }
 
 @keyframes scan {
+
     0% {
-        top: 31%;
+        top: 33%;
     }
 
     50% {
-        top: 68%;
+        top: 67%;
     }
 
     100% {
-        top: 31%;
+        top: 33%;
     }
 }
 
@@ -147,6 +151,7 @@ video {
 
 button,
 .choose-photo {
+
     display: flex;
 
     align-items: center;
@@ -175,14 +180,6 @@ button,
             #6a35ff,
             #00bfff
         );
-
-    box-shadow:
-        0 8px 25px rgba(0,180,255,0.25);
-}
-
-button:hover,
-.choose-photo:hover {
-    transform: translateY(-2px);
 }
 
 input[type="file"] {
@@ -212,33 +209,26 @@ input[type="file"] {
 
 .isbn {
     margin-top: 12px;
-
     color: #8feaff;
-
     font-family: monospace;
 }
 
 .price {
     margin-top: 15px;
-
     font-size: 20px;
     font-weight: bold;
-
     color: #6dffb2;
 }
 
 .cover {
     width: 100px;
     max-height: 145px;
-
     object-fit: cover;
-
     border-radius: 8px;
-
     margin-bottom: 12px;
-
     display: none;
 }
+
 </style>
 </head>
 
@@ -305,7 +295,7 @@ input[type="file"] {
         </div>
 
 
-        <button onclick="startScanner()">
+        <button id="startButton">
 
             📷 Start ISBN Scanner
 
@@ -335,9 +325,6 @@ input[type="file"] {
             <div
                 class="book-title"
                 id="bookTitle">
-
-                Book found
-
             </div>
 
             <div
@@ -353,9 +340,6 @@ input[type="file"] {
             <div
                 class="price"
                 id="price">
-
-                🔎 Looking up book...
-
             </div>
 
         </div>
@@ -364,8 +348,6 @@ input[type="file"] {
 
 </div>
 
-
-<!-- BARCODE SCANNER -->
 
 <script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
 
@@ -385,6 +367,11 @@ const statusText =
 const placeholder =
     document.getElementById("placeholder");
 
+const startButton =
+    document.getElementById("startButton");
+
+
+/* START CAMERA */
 
 async function startScanner() {
 
@@ -395,53 +382,96 @@ async function startScanner() {
     try {
 
         statusText.textContent =
-            "📷 Starting camera...";
+            "📷 Starting rear camera...";
+
+        placeholder.style.display = "none";
 
         /*
-         * Multi-format scanner.
-         * We only accept ISBN-13/EAN-13
-         * results below.
+         * Ask the phone for the rear camera.
+         */
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    },
+
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    }
+                },
+
+                audio: false
+
+            });
+
+
+        /*
+         * Put the camera stream
+         * directly into the video.
+         */
+
+        video.srcObject = stream;
+
+        await video.play();
+
+
+        statusText.textContent =
+            "🔎 Looking for ISBN barcode...";
+
+
+        /*
+         * Start ZXing scanner.
          */
 
         codeReader =
             new ZXingBrowser.BrowserMultiFormatReader();
 
+
         scanning = true;
-
-        placeholder.style.display = "none";
-
-        statusText.textContent =
-            "🔎 Looking for the ISBN barcode...";
 
 
         controls =
-            await codeReader.decodeFromVideoDevice(
-
-                undefined,
-
+            await codeReader.decodeFromVideoElement(
                 video,
-
                 (result, error) => {
 
                     if (!result) {
                         return;
                     }
 
+
                     const barcode =
                         result.getText();
 
+
+                    console.log(
+                        "Barcode detected:",
+                        barcode
+                    );
+
+
                     /*
-                     * ISBN-13 barcodes are
-                     * 13 digits and normally
-                     * start with 978 or 979.
+                     * ISBN-13.
                      */
 
                     if (
-                        /^[0-9]{13}$/.test(barcode) &&
+
+                        /^[0-9]{13}$/.test(barcode)
+
+                        &&
+
                         (
                             barcode.startsWith("978") ||
                             barcode.startsWith("979")
                         )
+
                     ) {
 
                         foundISBN(barcode);
@@ -457,15 +487,16 @@ async function startScanner() {
 
         console.error(error);
 
-        scanning = false;
-
         statusText.textContent =
-            "❌ Camera could not start. " +
-            "Allow camera access and try again.";
+            "❌ Camera error: " +
+            error.message;
 
     }
+
 }
 
+
+/* STOP CAMERA */
 
 function stopScanner() {
 
@@ -476,53 +507,73 @@ function stopScanner() {
 
     }
 
+
     if (codeReader) {
 
         codeReader.reset();
 
     }
 
+
+    if (video.srcObject) {
+
+        const tracks =
+            video.srcObject.getTracks();
+
+        tracks.forEach(track => {
+            track.stop();
+        });
+
+        video.srcObject = null;
+
+    }
+
+
     scanning = false;
+
 }
 
 
+/* ISBN FOUND */
+
 async function foundISBN(isbn) {
 
-    if (!scanning) {
-        return;
-    }
-
     stopScanner();
+
 
     statusText.textContent =
         "✅ ISBN found: " + isbn;
 
+
     document
         .getElementById("result")
         .style.display = "block";
+
 
     document
         .getElementById("isbn")
         .textContent =
         "ISBN: " + isbn;
 
+
     document
         .getElementById("bookTitle")
         .textContent =
         "🔎 Finding your book...";
 
-    document
-        .getElementById("author")
-        .textContent = "";
 
     document
         .getElementById("price")
         .textContent =
         "Please wait...";
 
+
     await findBook(isbn);
+
 }
 
+
+/* FIND BOOK */
 
 async function findBook(isbn) {
 
@@ -535,9 +586,15 @@ async function findBook(isbn) {
                 ".json"
             );
 
+
         if (!response.ok) {
-            throw new Error("Book not found");
+
+            throw new Error(
+                "Book not found"
+            );
+
         }
+
 
         const book =
             await response.json();
@@ -566,10 +623,12 @@ async function findBook(isbn) {
         const cover =
             document.getElementById("cover");
 
+
         cover.src =
             "https://covers.openlibrary.org/isbn/" +
             isbn +
             "-M.jpg";
+
 
         cover.style.display =
             "block";
@@ -594,15 +653,22 @@ async function findBook(isbn) {
         document
             .getElementById("price")
             .textContent =
-            "Try scanning the ISBN barcode again.";
+            "Try scanning the barcode again.";
 
     }
+
 }
 
 
-/*
- * Photo button
- */
+/* START BUTTON */
+
+startButton.addEventListener(
+    "click",
+    startScanner
+);
+
+
+/* PHOTO BUTTON */
 
 document
     .getElementById("photoInput")
@@ -616,8 +682,7 @@ document
                     "🖼️ Photo selected.";
 
                 alert(
-                    "Photo ISBN scanning will be added next. " +
-                    "For now, use the camera scanner."
+                    "Photo ISBN scanning will be added next."
                 );
 
             }
