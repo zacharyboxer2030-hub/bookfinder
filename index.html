@@ -33,8 +33,6 @@ body {
     max-width: 500px;
 }
 
-/* HEADER */
-
 .header {
     text-align: center;
     padding: 15px 0 20px;
@@ -42,7 +40,6 @@ body {
 
 .logo {
     font-size: 42px;
-    font-weight: bold;
 }
 
 .title {
@@ -56,52 +53,37 @@ body {
     margin-top: 8px;
 }
 
-/* MAIN CARD */
-
 .card {
     background: rgba(255,255,255,0.09);
-
     border: 1px solid rgba(255,255,255,0.15);
-
     backdrop-filter: blur(15px);
-
     border-radius: 25px;
-
     padding: 18px;
 
     box-shadow:
         0 20px 60px rgba(0,0,0,0.35);
 }
 
-/* CAMERA */
-
 .scanner {
     position: relative;
-
     width: 100%;
     height: 330px;
-
     border-radius: 20px;
-
     overflow: hidden;
-
     background: #05070d;
 }
 
 video {
     width: 100%;
     height: 100%;
-
     object-fit: cover;
 }
 
 .camera-placeholder {
     position: absolute;
-
     inset: 0;
 
     display: flex;
-
     justify-content: center;
     align-items: center;
 
@@ -114,57 +96,22 @@ video {
     pointer-events: none;
 }
 
-/* SCAN BOX */
-
-.scan-corners {
+.scan-box {
     position: absolute;
 
-    inset: 18%;
+    left: 15%;
+    right: 15%;
+    top: 20%;
+    bottom: 20%;
 
-    border: 3px solid rgba(255,255,255,0.7);
-
-    border-radius: 15px;
+    border: 3px solid white;
+    border-radius: 20px;
 
     pointer-events: none;
-}
-
-/* MOVING SCAN LINE */
-
-.scan-line {
-    position: absolute;
-
-    left: 20%;
-    right: 20%;
-
-    height: 3px;
-
-    background: #00e5ff;
 
     box-shadow:
-        0 0 15px #00e5ff;
-
-    animation: scan 2s infinite;
-
-    pointer-events: none;
+        0 0 20px rgba(0,229,255,0.7);
 }
-
-@keyframes scan {
-
-    0% {
-        top: 22%;
-    }
-
-    50% {
-        top: 75%;
-    }
-
-    100% {
-        top: 22%;
-    }
-
-}
-
-/* STATUS */
 
 .status {
     text-align: center;
@@ -176,15 +123,12 @@ video {
     min-height: 22px;
 }
 
-/* BUTTONS */
-
 button,
 .choose-photo {
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     width: 100%;
@@ -192,7 +136,6 @@ button,
     text-align: center;
 
     border: none;
-
     border-radius: 15px;
 
     padding: 15px;
@@ -200,7 +143,6 @@ button,
     margin-top: 12px;
 
     font-size: 16px;
-
     font-weight: bold;
 
     color: white;
@@ -216,32 +158,16 @@ button,
 
     box-shadow:
         0 8px 25px rgba(0,180,255,0.25);
-
-    transition: 0.2s;
 }
 
 button:hover,
 .choose-photo:hover {
-
     transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 30px rgba(0,180,255,0.35);
 }
-
-button:active,
-.choose-photo:active {
-
-    transform: scale(0.98);
-}
-
-/* HIDE FILE INPUT */
 
 input[type="file"] {
     display: none;
 }
-
-/* RESULT */
 
 .result {
 
@@ -256,7 +182,49 @@ input[type="file"] {
     display: none;
 }
 
-/* BOOK COVER */
+.book-title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.author {
+    color: #c4ccff;
+    margin-top: 6px;
+}
+
+.isbn {
+    margin-top: 12px;
+
+    color: #8feaff;
+
+    font-family: monospace;
+}
+
+.qr-result {
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    background: rgba(255,255,255,0.08);
+
+    border-radius: 12px;
+
+    word-break: break-all;
+
+    color: #ffffff;
+}
+
+.price {
+
+    margin-top: 15px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    color: #6dffb2;
+}
 
 .cover {
 
@@ -273,57 +241,13 @@ input[type="file"] {
     display: none;
 }
 
-/* BOOK TITLE */
-
-.book-title {
-
-    font-size: 22px;
-
-    font-weight: bold;
-}
-
-/* AUTHOR */
-
-.author {
-
-    color: #c4ccff;
-
-    margin-top: 6px;
-}
-
-/* ISBN */
-
-.isbn {
-
-    margin-top: 12px;
-
-    color: #8feaff;
-
-    font-family: monospace;
-}
-
-/* PRICE */
-
-.price {
-
-    margin-top: 15px;
-
-    font-size: 20px;
-
-    font-weight: bold;
-
-    color: #6dffb2;
-}
-
 </style>
-
 </head>
+
 
 <body>
 
 <div class="app">
-
-    <!-- HEADER -->
 
     <div class="header">
 
@@ -342,11 +266,8 @@ input[type="file"] {
     </div>
 
 
-    <!-- MAIN CARD -->
-
     <div class="card">
 
-        <!-- CAMERA -->
 
         <div class="scanner">
 
@@ -357,49 +278,42 @@ input[type="file"] {
                 playsinline>
             </video>
 
+
             <div
                 class="camera-placeholder"
                 id="placeholder">
 
                 📷
-
                 <br><br>
 
-                Point your camera at the
+                Point your camera at a
                 <br>
 
-                barcode on the back of the book
+                QR code
 
             </div>
 
-            <div class="scan-corners"></div>
 
-            <div class="scan-line"></div>
+            <div class="scan-box"></div>
 
         </div>
 
-
-        <!-- STATUS -->
 
         <div
             class="status"
             id="status">
 
-            Press Start Scanner
+            Press Start QR Scanner
 
         </div>
 
 
-        <!-- START CAMERA -->
-
         <button onclick="startScanner()">
 
-            📷 Start Automatic Scanner
+            📷 Start QR Scanner
 
         </button>
 
-
-        <!-- CHOOSE PHOTO -->
 
         <label class="choose-photo">
 
@@ -413,39 +327,48 @@ input[type="file"] {
         </label>
 
 
-        <!-- RESULT -->
-
         <div
             class="result"
             id="result">
+
 
             <img
                 id="cover"
                 class="cover">
 
+
             <div
                 class="book-title"
                 id="bookTitle">
 
-                Book found
+                QR Code Found
 
             </div>
+
 
             <div
                 class="author"
                 id="author">
             </div>
 
+
             <div
                 class="isbn"
                 id="isbn">
             </div>
 
+
+            <div
+                class="qr-result"
+                id="qrResult">
+            </div>
+
+
             <div
                 class="price"
                 id="price">
 
-                🔎 Looking up book...
+                🔎 Looking for book...
 
             </div>
 
@@ -456,7 +379,7 @@ input[type="file"] {
 </div>
 
 
-<!-- ZXING BARCODE SCANNER -->
+<!-- QR CODE SCANNER -->
 
 <script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
 
@@ -480,13 +403,14 @@ const placeholder =
     document.getElementById("placeholder");
 
 
-/* START SCANNER */
+/* START QR SCANNER */
 
 async function startScanner() {
 
     if (scanning) {
         return;
     }
+
 
     try {
 
@@ -495,7 +419,7 @@ async function startScanner() {
 
 
         codeReader =
-            new ZXingBrowser.BrowserMultiFormatReader();
+            new ZXingBrowser.BrowserQRCodeReader();
 
 
         scanning = true;
@@ -506,7 +430,7 @@ async function startScanner() {
 
 
         statusText.textContent =
-            "🔎 Looking for the ISBN barcode...";
+            "🔎 Looking for a QR code...";
 
 
         controls =
@@ -520,29 +444,11 @@ async function startScanner() {
 
                     if (result) {
 
-                        const barcode =
+                        const qrText =
                             result.getText();
 
 
-                        /*
-                         ISBN-13 normally starts
-                         with 978 or 979
-                        */
-
-                        if (
-
-                            barcode.length === 13 &&
-
-                            (
-                                barcode.startsWith("978") ||
-                                barcode.startsWith("979")
-                            )
-
-                        ) {
-
-                            foundISBN(barcode);
-
-                        }
+                        foundQRCode(qrText);
 
                     }
 
@@ -552,10 +458,10 @@ async function startScanner() {
 
     }
 
+
     catch (error) {
 
         console.error(error);
-
 
         scanning = false;
 
@@ -594,9 +500,9 @@ function stopScanner() {
 }
 
 
-/* ISBN FOUND */
+/* QR CODE FOUND */
 
-async function foundISBN(isbn) {
+async function foundQRCode(qrText) {
 
     if (!scanning) {
         return;
@@ -607,7 +513,7 @@ async function foundISBN(isbn) {
 
 
     statusText.textContent =
-        "✅ ISBN found: " + isbn;
+        "✅ QR code found!";
 
 
     document
@@ -616,29 +522,79 @@ async function foundISBN(isbn) {
 
 
     document
-        .getElementById("isbn")
+        .getElementById("qrResult")
         .textContent =
-        "ISBN: " + isbn;
+        qrText;
 
 
     document
         .getElementById("bookTitle")
         .textContent =
-        "🔎 Finding your book...";
+        "QR Code Found";
 
 
     document
         .getElementById("author")
-        .textContent = "";
+        .textContent =
+        "";
+
+
+    document
+        .getElementById("isbn")
+        .textContent =
+        "";
 
 
     document
         .getElementById("price")
         .textContent =
-        "Please wait...";
+        "🔎 Checking QR code...";
 
 
-    await findBook(isbn);
+    await checkForISBN(qrText);
+
+}
+
+
+/* CHECK WHETHER QR CODE CONTAINS AN ISBN */
+
+async function checkForISBN(text) {
+
+    const isbnMatch =
+        text.match(
+            /(97[89][0-9]{10})/
+        );
+
+
+    if (isbnMatch) {
+
+        const isbn =
+            isbnMatch[1];
+
+
+        document
+            .getElementById("isbn")
+            .textContent =
+            "ISBN: " + isbn;
+
+
+        document
+            .getElementById("price")
+            .textContent =
+            "🔎 Finding your book...";
+
+
+        await findBook(isbn);
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("price")
+        .textContent =
+        "QR code scanned successfully.";
 
 }
 
@@ -651,11 +607,9 @@ async function findBook(isbn) {
 
         const response =
             await fetch(
-
                 "https://openlibrary.org/isbn/" +
                 isbn +
                 ".json"
-
             );
 
 
@@ -672,16 +626,12 @@ async function findBook(isbn) {
             await response.json();
 
 
-        /* TITLE */
-
         document
             .getElementById("bookTitle")
             .textContent =
             book.title ||
             "Unknown title";
 
-
-        /* PUBLISHER */
 
         if (book.publishers) {
 
@@ -695,8 +645,6 @@ async function findBook(isbn) {
 
         }
 
-
-        /* COVER */
 
         const cover =
             document.getElementById("cover");
@@ -712,14 +660,13 @@ async function findBook(isbn) {
             "block";
 
 
-        /* PRICE */
-
         document
             .getElementById("price")
             .textContent =
             "💷 Price comparison coming next";
 
     }
+
 
     catch (error) {
 
@@ -735,7 +682,7 @@ async function findBook(isbn) {
         document
             .getElementById("price")
             .textContent =
-            "Try scanning the barcode again.";
+            "The QR code was scanned, but the ISBN could not be found.";
 
     }
 
@@ -756,8 +703,8 @@ document
                     "🖼️ Photo selected.";
 
                 alert(
-                    "Photo scanning will be added next. " +
-                    "For now, use the automatic camera scanner."
+                    "Photo QR scanning can be added next. " +
+                    "For now, use the camera scanner."
                 );
 
             }
